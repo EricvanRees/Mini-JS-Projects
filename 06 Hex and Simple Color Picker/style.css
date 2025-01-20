@@ -45,6 +45,10 @@ a {
   background-color: whitesmoke;
 }
 
+#flip span {
+  animation: colorchange 5s infinite;
+}
+
 main{
   margin: auto;
   width: 500px;
@@ -77,3 +81,23 @@ p {
   font-size: 18px;
 }
 
+@keyframes colorchange {
+  0% {
+    color: indigo;
+  }
+  20% {
+    color: blue;
+  }
+  40% {
+    color: green;
+  }
+  60% {
+    color: yellow;
+  }
+  80% {
+    color: orange;
+  }
+  100% {
+    color: red;
+  }
+}
