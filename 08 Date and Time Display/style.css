@@ -1,0 +1,42 @@
+/* see https://www.explainthis.io/en/swe/css-center for using flexbox anc center a div horizontally and vertically */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  width: 500px;
+  height: 250px;
+  margin: auto;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: whitesmoke;
+  color: gray;
+  width: 500px;
+  height: 250px;
+}
+
+p {
+  padding: 5px;
+}
+
