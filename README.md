@@ -13,3 +13,4 @@ Here's a short description of each project and the core concepts that are applie
    A JS file generates a random hex value.
 7) A counter value is generated dynamically and displayed when clicking a "decrease" or "increase" button. Depending on whether the value is positive or negative, the color value changes.
 8) A JS script calculates the current day of the week and the current time. Flexbox is used to style the page.    
+9) An HTML page that automatically refreshes when a button is clicked, so that a new image is loaded as an HTML object from Lorem Picsum.
