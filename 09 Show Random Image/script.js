@@ -1,7 +1,13 @@
 
 let btn = document.querySelector(".btn");
+let imageDiv = document.querySelector('.img');
 
 btn.addEventListener("click", function() {
-  // Refresh the page
-  location.reload()
+    imageDiv.innerHTML = 
+        `<object
+          data="https://picsum.photos/500/250"
+          width="500"
+          height="250"
+          style="overflow: hidden"
+        ></object>`
 });
