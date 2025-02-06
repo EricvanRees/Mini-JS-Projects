@@ -5,7 +5,7 @@
 } 
 
 body {
-  background-color: yellow;
+  background-color: papayawhip;
 }
 
 main {
@@ -27,7 +27,7 @@ main {
   margin: auto;
   padding: 25px;
   text-align: center;
-  background-color: papayawhip;
+  background-color: salmon;
   display: flex;
   justify-content: center;
   align-items: center;

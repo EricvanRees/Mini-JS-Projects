@@ -1,4 +1,12 @@
-/* see https://www.explainthis.io/en/swe/css-center for using flexbox anc center a div horizontally and vertically */
+/* 
+
+This project uses flexbox to center a div horizontally and vertically.
+
+Within a box, the current day of the week and the current time are displayed using JavaScript
+
+See https://www.explainthis.io/en/swe/css-center for using flexbox anc center a div horizontally and vertically 
+
+*/
 
 * {
   margin: 0;
