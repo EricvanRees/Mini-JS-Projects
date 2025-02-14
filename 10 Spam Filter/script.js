@@ -1,4 +1,4 @@
-// This is a personally annoated script, taken from the FreeCodeCamp JavaScript Algorithms and Data Structures page: https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/.
+// This is a personally annotated script, taken from the FreeCodeCamp JavaScript Algorithms and Data Structures page: https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures-v8/.
 
 // set variables for different page elements
 const messageInput = document.getElementById('message-input');

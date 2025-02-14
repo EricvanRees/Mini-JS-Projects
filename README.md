@@ -14,3 +14,4 @@ Here's a short description of each project and the core concepts that are applie
 7) A counter value is generated dynamically and displayed when clicking a "decrease" or "increase" button. Depending on whether the value is positive or negative, the color value changes.
 8) A JS script calculates the current day of the week and the current time. Flexbox is used to style the page.    
 9) An HTML page that automatically inserts a new HTML object with an image from Lorem Picsum when a button is clicked. Uses event listeners, functions, and DOM manipulation.
+10) A Spam Filter that combines multiple regular expressions - The JS file is extensively commented to explain how different JS functions and regex work. 
