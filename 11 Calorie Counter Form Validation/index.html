@@ -10,8 +10,11 @@
     <main>
       <h1>Calorie Counter</h1>
       <div class="container"></div>
+      <!-- Add form element-->
       <form id=calorie-counter>
+        <!-- number cannot be lower than zero using "min" property: -->
         <label for="budget" >Budget</label><input id="budget" type="number" min="0" placeholder="Daily calorie budget" required>
+      <!-- Each calory category has its own fieldset -->
         <fieldset id="breakfast">
           <legend>Breakfast</legend>
           <div class="input-container"></div>
@@ -32,6 +35,7 @@
           <legend>Exercise</legend>
           <div class="input-container"></div>
         </fieldset>
+        <!-- div contains button and dropdown menu for different calory consumption/burning options:-->
         <div class="controls">
           <span>
           <label for="entry-dropdown">Add food or exercise:</label> 
@@ -45,11 +49,13 @@
           <button type="button" id="add-entry">Add Entry</button>
           </span>
         </div>
+        <!-- div contains button to submit form and clear form: -->
         <div>
           <button type="submit">Calculate Remaining Calories</button>
           <button type="button" id="clear">Clear</button>
         </div>
       </form>
+      <!-- div to display output when calculating remaining calories -->
       <div id="output" class="output hide"></div>
     </div>
   </main>
