@@ -1,9 +1,12 @@
+// Access HTML elements with variables
 const teamName = document.getElementById("team");
 const typeOfSport = document.getElementById("sport");
 const worldCupYear = document.getElementById("year");
 const headCoach = document.getElementById("head-coach");
 const playerCards = document.getElementById("player-cards");
 const playersDropdownList = document.getElementById("players");
+
+// data structure that holds all of the information for the football team:
 const myFavoriteFootballTeam = {
   team: "Argentina",
   sport: "Football",
@@ -171,19 +174,29 @@ const myFavoriteFootballTeam = {
   ],
 };
 
+// Object.freeze(obj) will freeze this object and prevent any changes being made to it.
 Object.freeze(myFavoriteFootballTeam);
+
+// object destructuring syntax allows you to unpack values from arrays and objects
+// use object destructuring to access different keys from myFavoriteFootballTeam object
 const { sport, team, year, players } = myFavoriteFootballTeam;
 const { coachName } = myFavoriteFootballTeam.headCoach;
 
+// display object data onscreen
 typeOfSport.textContent = sport;
 teamName.textContent = team;
 worldCupYear.textContent = year;
 headCoach.textContent = coachName;
 
+// function that will show player cards based on the selections made by the user in the Filter Teammates dropdown menu:
 const setPlayerCards = (arr = players) => {
+  // arr = array for adding the player card information to the page
+  // .innerHTML sets the HTML markup for the playerCards element
   playerCards.innerHTML += arr
     .map(
+      /* arr contains a series of objects that each contains a name, position, number, isCaptain and nickname property. In order to access each of those properties inside the callback function, you will need to use object destructuring to unpack them into variables: */
       ({ name, position, number, isCaptain, nickname }) => {
+        /* Inside the body of the callback function, a template literal `` is returned which contains the HTML content for the player cards: */
         return `
         <div class="player-card">
           <h2>${isCaptain ? "(Captain)" : ""} ${name}</h2>
@@ -193,35 +206,44 @@ const setPlayerCards = (arr = players) => {
         </div>
       ` }
     )
+    /* To remove the commas between each player-card so it does not show up on screen, chain the .join() method to the .map() method. */
     .join("");
 };
 
+// function that will detect when a user makes a selection from the playersDropdownList:
+// "e" represents an object which contains the information for that event.
+// this value is used to show player cards based on the position they play.
 playersDropdownList.addEventListener("change", (e) => {
   playerCards.innerHTML = "";
 
   switch (e.target.value) {
+    /* If the user selects Nicknames from the dropdown menu you will want to filter out player cards that have a nickname. */
     case "nickname":
       setPlayerCards(players.filter((player) => player.nickname !== null));
       break;
+      // same for forward position
     case "forward":
       setPlayerCards(players.filter((player) => player.position === "forward"));
       break;
+    // same for midfielder position
     case "midfielder":
       setPlayerCards(
         players.filter((player) => player.position === "midfielder")
       );
       break;
+      // same for defender position
     case "defender":
       setPlayerCards(
         players.filter((player) => player.position === "defender")
       );
       break;
+      // same for goalkeeper position
     case "goalkeeper":
       setPlayerCards(
         players.filter((player) => player.position === "goalkeeper")
       );
       break;
-
+  // default clause if none of the other case clauses match the user selection:
   default: 
   setPlayerCards();
 }
