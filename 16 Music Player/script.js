@@ -101,11 +101,28 @@ const playSong = (id) => {
   audio.play();
 };
 
+const pauseSong = () => {
+  userData.songCurrentTime = audio.currentTime;
+  playButton.classList.remove("playing");
+  audio.pause();
+}
+
+const playNextSong = () => {
+  if (userData?.currentSong === null) {
+    playSong(userData?.songs[0].id);
+  } else {
+    const currentSongIndex = getCurrentSongIndex();
+    const nextSong = userData?.songs[currentSongIndex + 1];
+    playSong(nextSong.id);
+}
+
+// step 56
+
 const renderSongs = (array) => {
   const songsHTML = array
     .map((song)=> {
       return `
-      <li id="song-${song.id}" class="playlist-song">
+      <li id="song-${song.id}" class="playlist-song" onclick="playSong(${song.id})">
       <button class="playlist-song-info">
           <span class="playlist-song-title">${song.title}</span>
           <span class="playlist-song-artist">${song.artist}</span>
@@ -123,7 +140,18 @@ const renderSongs = (array) => {
   playlistSongs.innerHTML = songsHTML;
 };
 
-// step 42
+const getCurrentSongIndex = () => {
+  return userData?.songs.indexOf(userData?.currentSong);
+}
+
+playButton.addEventListener("click", ()=> {
+  if (userData?.currentSong === null) {
+    playSong(userData?.songs[0].id);
+  } else {
+    playSong(userData?.currentSong.id);
+}})
+
+pauseButton.addEventListener("click", pauseSong);
 
 const sortSongs = () => {
   userData?.songs.sort((a,b) => {
