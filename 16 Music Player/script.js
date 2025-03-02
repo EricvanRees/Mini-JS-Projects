@@ -8,12 +8,12 @@ const shuffleButton = document.getElementById("shuffle");
 const allSongs = [
   {
     id: 0,
-    title: "Scratching The Surface",
-    artist: "Quincy Larson",
-    duration: "4:25",
-    src: "https://cdn.freecodecamp.org/curriculum/js-music-player/scratching-the-surface.mp3",
+    title: "Etude",
+    artist: "Corey Christensen",
+    duration: "2:50",
+    src: "22 Etude.mp3",
   },
-  {
+  /* {
     id: 1,
     title: "Can't Stay Down",
     artist: "Quincy Larson",
@@ -75,7 +75,7 @@ const allSongs = [
     artist: "Quincy Larson",
     duration: "2:43",
     src: "https://cdn.freecodecamp.org/curriculum/js-music-player/chasing-that-feeling.mp3",
-  },
+  }, */
 ];
 
 const audio = new Audio();
@@ -97,8 +97,8 @@ const playSong = (id) => {
   }
   userData.currentSong = song;
   playButton.classList.add("playing");
-  playSong(highlightCurrentSong());
-  playSong(setPlayerDisplay());
+  highlightCurrentSong();
+  setPlayerDisplay();
   setPlayButtonAccessibleText();
   audio.play();
 };
@@ -115,7 +115,9 @@ const playNextSong = () => {
   } else {
     const currentSongIndex = getCurrentSongIndex();
     const nextSong = userData?.songs[currentSongIndex + 1];
-    playSong(nextSong.id);
+    if (nextSong) {
+      playSong(nextSong.id);
+    }
   }
 }
 
@@ -125,7 +127,9 @@ const playPreviousSong = () => {
   } else {
     const currentSongIndex = getCurrentSongIndex();
     const previousSong = userData?.songs[currentSongIndex - 1];
-    playSong(previousSong.id);
+    if (previousSong) {
+      playSong(previousSong.id);
+    }
   }
 }
 
@@ -140,6 +144,12 @@ const shuffle = () => {
 }
 
 const deleteSong = (id) => {
+  if(userData?.currentSong?.id === id) {
+    userData.currentSong = null;
+    userData.songCurrentTime = 0;
+    pauseSong();
+    setPlayerDisplay();
+  } 
   userData.songs = userData?.songs.filter((song) => song.id !== id);
   renderSongs(userData?.songs);
   highlightCurrentSong();
@@ -167,7 +177,7 @@ const renderSongs = (array) => {
   const songsHTML = array
     .map((song)=> {
       return `
-      <li id="song-${song.id}" class="playlist-song" onclick="playSong(${song.id})">
+      <li id="song-${song.id}" class="playlist-song" onclick="deleteSong(${song.id})" event.stopPropagation(); onclick="playSong(${song.id})">
       <button class="playlist-song-info">
           <span class="playlist-song-title">${song.title}</span>
           <span class="playlist-song-artist">${song.artist}</span>
@@ -183,6 +193,20 @@ const renderSongs = (array) => {
     .join("");
 
   playlistSongs.innerHTML = songsHTML;
+  if (userData?.songs.length === 0){
+    const resetButton = document.createElement("button");
+    const resetText = document.createTextNode("Reset Playlist");
+    resetButton.id = "reset";
+    resetButton.ariaLabel = "Reset playlist";
+    resetButton.appendChild(resetText);
+    playlistSongs.appendChild(resetButton);
+    resetButton.addEventListener("click", ()=>{
+      userData.songs = [...allSongs];
+      renderSongs(sortSongs());
+      setPlayButtonAccessibleText();
+      resetButton.remove();
+    });
+  } 
 };
 
 const setPlayButtonAccessibleText = () => {
@@ -192,7 +216,7 @@ const setPlayButtonAccessibleText = () => {
 }
 
 const getCurrentSongIndex = () => {
-  return userData?.songs.indexOf(userData?.currentSong);
+  return userData?.currentSong ? userData.songs.indexOf(userData.currentSong) : 0;
 }
 
 playButton.addEventListener("click", ()=> {
@@ -206,21 +230,24 @@ pauseButton.addEventListener("click", pauseSong);
 nextButton.addEventListener("click", playNextSong);
 previousButton.addEventListener("click", playPreviousSong);
 shuffleButton.addEventListener("click", shuffle);
+audio.addEventListener("ended", ()=>{
+  const currentSongIndex = getCurrentSongIndex();
+  const nextSongExists = userData.songs.length - 1 > currentSongIndex? true : false;
+  if(nextSongExists) {
+    playNextSong();
+  } else {
+    userData.currentSong = null;
+    userData.songCurrentTime = 0;
+    pauseSong()
+    setPlayerDisplay()
+    highlightCurrentSong()
+    setPlayButtonAccessibleText()
+  }
+})
 
 const sortSongs = () => {
-  userData?.songs.sort((a,b) => {
-    if (a.title < b.title) {
-      return -1;
-    }
-
-    if (a.title > b.title) {
-      return 1;
-    }
-
-    return 0;
-  });
-
-  return userData?.songs;
+  if (!userData?.songs || userData.songs.length === 0) return [];
+  return userData.songs.sort((a, b) => a.title.localeCompare(b.title));
 };
 
 renderSongs(sortSongs());
