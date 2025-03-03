@@ -1,3 +1,6 @@
+/* In this project you will learn basic string and array methods by building a music player app. You will be able to play, pause, skip, and shuffle songs. */
+
+// accessing different HTML elements of the music player
 const playlistSongs = document.getElementById("playlist-songs");
 const playButton = document.getElementById("play");
 const pauseButton = document.getElementById("pause");
@@ -79,6 +82,10 @@ const allSongs = [
 ];
 
 const audio = new Audio();
+
+/* Your music player should keep track of the songs, the current song playing, and the time of the current song. To do this, you will need to create a userData object to store this information. 
+
+Since users will be able to shuffle and delete songs from the playlist, you will need to create a copy of the allSongs array without mutating the original. This is where the spread operator comes in handy. */
 let userData = {
   songs: [...allSongs],
   currentSong: null,
@@ -86,30 +93,42 @@ let userData = {
 };
 
 const playSong = (id) => {
+  /* The find() method retrieves the first element within an array that fulfills the conditions specified in the provided callback function. If no element satisfies the condition, the method returns undefined. */
   const song = userData?.songs.find((song) => song.id === id);
+  // This tells the audio element where to find the audio data for the selected song:
   audio.src = song.src;
+  // This tells the audio element what to display as the title of the song:
   audio.title = song.title;
+
+  /* Before playing the song, you need to make sure it starts from the beginning. This can be achieved by the use of the currentTime property on the audio object. */
 
   if (userData?.currentSong === null || userData?.currentSong.id !== song.id) {
     audio.currentTime = 0;
+    /* An else block handles the song's current playback time. This allows you to resume the current song at the point where it was paused. */
   } else {
     audio.currentTime = userData?.songCurrentTime;
   }
+  /* You need to update the current song being played as well as the appearance of the playButton element. */
   userData.currentSong = song;
+  /* use the classList property and the add() method to add the "playing" class to the playButton element. This will look for the class "playing" in the CSS file and add it to the playButton element. To finally play the song, use the play() method on the audio variable. play() is a method from the web audio API for playing an mp3 file. */
   playButton.classList.add("playing");
   highlightCurrentSong();
+  /* To ensure the player's display updates whenever a new song begins playing, call the setPlayerDisplay() function within the playSong() function. */
   setPlayerDisplay();
   setPlayButtonAccessibleText();
   audio.play();
 };
 
 const pauseSong = () => {
+  /* To store the current time of the song when it is paused, set the songCurrentTime of the userData object to the currentTime of the audio variable. */
   userData.songCurrentTime = audio.currentTime;
+  /* Use classList and remove() method to remove the playing class from the playButton, since the song will be paused at this point. */
   playButton.classList.remove("playing");
   audio.pause();
 }
 
 const playNextSong = () => {
+  // This will check if there's no current song playing in the userData object:
   if (userData?.currentSong === null) {
     playSong(userData?.songs[0].id);
   } else {
@@ -122,10 +141,12 @@ const playNextSong = () => {
 }
 
 const playPreviousSong = () => {
+  /* This will check if there is currently no song playing. If there isn't any, exit the function using a return: */
   if (userData?.currentSong === null) {
     return; 
   } else {
     const currentSongIndex = getCurrentSongIndex();
+    /* To get the previous song, subtract 1 from the currentSongIndex of userData?.songs and assign it to the constant previousSong: */
     const previousSong = userData?.songs[currentSongIndex - 1];
     if (previousSong) {
       playSong(previousSong.id);
@@ -133,10 +154,13 @@ const playPreviousSong = () => {
   }
 }
 
+/* This function is responsible for shuffling the songs in the playlist and performing necessary state management updates after the shuffling: */
 const shuffle = () => {
+  /* One way to randomize an array of items would be to subtract 0.5 from Math.random() which produces random values that are either positive or negative. This makes the comparison result a mix of positive and negative values, leading to a random ordering of elements. */
   userData?.songs.sort(() => Math.random() - 0.5);
   userData.currentSong = null;
   userData.songCurrentTime = 0;
+  /* You should also re-render the songs, pause the currently playing song, set the player display, and set the play button accessible text again. */
   renderSongs(userData?.songs);
   pauseSong();
   setPlayerDisplay();
@@ -169,11 +193,14 @@ const highlightCurrentSong = () => {
   const playlistSongElements = document.querySelectorAll(".playlist-song");
   const songToHighlight = document.getElementById(`song-${userData?.currentSong?.id}`);
   playlistSongElements.forEach((songEl) => {
+    // This will remove the attribute for each of the songs:
     songEl.removeAttribute("aria-current");
   });
 };
 
+/* To display the songs in the UI (User Interface), you'll need to create a renderSongs function. When the songs are displayed on the page, it should show the title, artist, duration of each song and a delete button. */
 const renderSongs = (array) => {
+  /* The map() method is used to iterate through an array and return a new array. It's helpful when you want to create a new array based on the values of an existing array. */
   const songsHTML = array
     .map((song)=> {
       return `
@@ -190,14 +217,17 @@ const renderSongs = (array) => {
       </li>
       `;
     })
+    // You will need to join the array into a single string by using the join() method.
     .join("");
-
+  
+  /* Assign songsHTML to the innerHTML property of the playlistSongs element. This will insert the li element you just created into the ul element in the already provided HTML file. */
   playlistSongs.innerHTML = songsHTML;
   if (userData?.songs.length === 0){
     const resetButton = document.createElement("button");
     const resetText = document.createTextNode("Reset Playlist");
     resetButton.id = "reset";
     resetButton.ariaLabel = "Reset playlist";
+    // appendChild() lets you add a node or an element as the child of another element: 
     resetButton.appendChild(resetText);
     playlistSongs.appendChild(resetButton);
     resetButton.addEventListener("click", ()=>{
@@ -209,20 +239,28 @@ const renderSongs = (array) => {
   } 
 };
 
+/* The setPlayButtonAccessibleText function will set the aria-label attribute to the current song, or to the first song in the playlist. And if the playlist is empty, it sets the aria-label to "Play" */
 const setPlayButtonAccessibleText = () => {
+  // Optional chaining (?.) helps prevent errors when accessing nested properties that might be null or undefined.
+
+  // get the currently playing song or the first song in the playlist: 
   const song = userData?.currentSong || userData?.songs[0];
   playButton.setAttribute("aria-label", song?.title ? `Play ${song.title}` : "Play");
 
 }
 
+// get the index of each song in the songs property of userData:
 const getCurrentSongIndex = () => {
+  /* The indexOf() array method returns the first index at which a given element can be found in the array, or -1 if the element is not present. */
   return userData?.currentSong ? userData.songs.indexOf(userData.currentSong) : 0;
 }
 
 playButton.addEventListener("click", ()=> {
   if (userData?.currentSong === null) {
+    // This will ensure the first song in the playlist is played first:
     playSong(userData?.songs[0].id);
   } else {
+    /* This ensures that the currently playing song will continue to play when the play button is clicked: */
     playSong(userData?.currentSong.id);
 }})
 
@@ -230,11 +268,14 @@ pauseButton.addEventListener("click", pauseSong);
 nextButton.addEventListener("click", playNextSong);
 previousButton.addEventListener("click", playPreviousSong);
 shuffleButton.addEventListener("click", shuffle);
+/* The "ended" event listener is fired when the playback of a media reaches the end: */
 audio.addEventListener("ended", ()=>{
   const currentSongIndex = getCurrentSongIndex();
+  // you need to check if there is a next song to play:
   const nextSongExists = userData.songs.length - 1 > currentSongIndex? true : false;
   if(nextSongExists) {
     playNextSong();
+    /* If there is no next song in the playlist, reset the currentSong key of userData to null, and its songCurrentTime property to 0. */
   } else {
     userData.currentSong = null;
     userData.songCurrentTime = 0;
